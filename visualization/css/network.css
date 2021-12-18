@@ -1,0 +1,257 @@
+ /* ----------- general layout -------------- */
+ /* general */
+ body {
+     background-color: black;
+     font-family: 'Roboto',
+         sans-serif;
+     font-size: 14px;
+     color: white;
+ }
+
+ /* typography */
+ h1 {
+     font-weight: medium;
+     font-size: 18px;
+     color: white;
+ }
+
+ label, .label {
+     color: white;
+ }
+
+ /* nav */
+ .navbar {
+     z-index: 5;
+     background-color: #242424;
+     position: relative;
+ }
+
+ .navbar-start>.navbar-item {
+     padding-left: 1.5em;
+ }
+
+ .navbar-end>.navbar-item {
+     padding: 0 2em;
+     border-left: 2px solid rgb(0, 0, 0);
+ }
+
+ .navbar-item>label {
+     padding-right: 1em;
+ }
+
+ .checkbox:hover {
+    color: ivory;
+ }
+
+ /* ---------- different graph setting ------------*/
+ /* network */
+ #network {
+     z-index: auto;
+ }
+
+ .selectedRegion {
+     z-index: 4;
+     color: #5EFFEF;
+     position: absolute;
+     left: 13px;
+     top: 60px;
+ }
+
+  .selectedPosition {
+      z-index: 4;
+      color: #5EFFEF;
+      position: relative;
+      left: 13px;
+      top: 30px;
+  }
+
+ .info {
+     color: #c7c7c7;
+     position: absolute;
+     top: 10px;
+     left: 10px;
+ }
+
+ /* legend */
+ .legendGroup {
+     position: absolute;
+     z-index: 4;
+     height: 300px;
+     bottom: 50px;
+     left: 13px;
+ }
+
+ .enter {
+     fill:green;
+ }
+
+ /* .simulationButton {
+     position: absolute;
+     text-align: center;
+     width: 100%;
+     z-index: 10;
+     bottom: 50px;
+     right: 150px;
+ } */
+
+ .simulationButton > button {
+     width: 85px;
+     margin-right: 5px;
+ }
+
+ #legend {
+     position: relative;
+     z-index: 4;
+     display: block;
+     height: 200px;
+     /* top: 0px; */
+     /* left: 13px; */
+ }
+
+ #legendScore {
+     position: relative;
+     display: block;
+     z-index: 4;
+     /* height: 150px; */
+     /* bottom: 0px; */
+     /* left: 0px; */
+ }
+
+ /* cartogram */
+ #cartogram {
+     z-index: 4;
+     background-color: #222;
+     position: absolute;
+     top: 100px;
+     right: 50px;
+     visibility: visible;
+     /* border-radius: 100%; */
+ }
+
+ #position-1 {
+     color: #5EFFEF;
+     position: absolute;
+     top: 10px;
+     right: 10px;
+ }
+
+ path.province {
+     /* display: none; */
+     fill: #333;
+     stroke: white;
+     stroke-opacity: 0.2;
+     stroke-width: 0.1;
+ }
+
+ circle.province {
+     stroke: #5EFFEF;
+     stroke-opacity: 0.9;
+     stroke-width: 0.5;
+     fill: #5EFFEF;
+     fill-opacity: 0.5;
+ }
+
+ circle.highlighted {
+     fill-opacity: 0.8;
+     stroke-width: 1;
+     stroke: #78fff2;
+ }
+
+ .province-label {
+     pointer-events: inherit;
+     font-family: Arial, sans-serif;
+     font-size: 18px;
+     fill: white;
+ }
+
+ .selected-label {
+     pointer-events: inherit;
+     font-family: Arial, sans-serif;
+     font-size: 18px;
+     fill: white;
+ }
+
+ .txt_province {
+     font-family: Arial, sans-serif;
+     font-size: 5px;
+     fill: white;
+     text-anchor: middle;
+ }
+
+ /* tree */
+ #tree {
+     z-index: 4;
+     background-color: #222;
+     position: absolute;
+     top: 470px;
+     right: 50px;
+     visibility: visible;
+     /* border-radius: 100%; */
+ }
+
+ .node text {
+     font: 12px sans-serif;
+ }
+
+ .node.active text {
+     opacity: 100;
+     /* font-weight: bold; */
+ }
+
+ .tree--internal circle {
+     /* fill: rgb(175, 175, 175); */
+ }
+
+ .tree--internal text {
+     text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
+ }
+
+ .tree--leaf text {
+     text-shadow: 0 1px 0 rgb(238, 58, 238), 0 -1px 0 rgb(238, 58, 238), 1px 0 0 rgb(238, 58, 238), -1px 0 0 rgb(238, 58, 238);
+ }
+
+ .treelink {
+     fill: none;
+     stroke: white;
+     /* stroke-width: 0.5; */
+     /* opacity: 0.1; */
+ }
+
+ #position-2 {
+     color: #5EFFEF;
+     position: absolute;
+     right: 10px;
+     top: 10px;
+ }
+
+ g.treehighlighted {
+     opacity: 1;
+     stroke-width: 7;
+     stroke: #78fff2;
+ }
+
+  g.treehighclicked {
+      opacity: 1;
+      stroke-width: 7;
+      stroke: #eb4034;
+  }
+
+ g.node {
+     cursor: pointer;
+ }
+
+ /* text {
+     font-family: FontAwesome;
+     -webkit-user-select: none;
+     -moz-user-select: none;
+     -ms-user-select: none;
+     user-select: none;
+ }  */
+
+  /* ----------- modal layout -------------- */
+  .modal-content {
+      width: 500px;
+  }
+  .modal-content .control {
+      margin-bottom:20px;
+  }
