@@ -20,3 +20,14 @@ function aggregateScore(array, score) {
     });
     return obj;
 }
+
+// normalize degree into 0-1
+function normalize(val, max, min) {
+    return (val - min) / (max - min);
+}
+
+// find unique position level
+function uniqueArray(a) {
+    return [...new Set(a)];
+}
+

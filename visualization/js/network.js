@@ -216,10 +216,6 @@ d3.queue()
                 })
             })
 
-            // find unique position level
-            function uniqueArray(a) {
-                return [...new Set(a)];
-            }
             tempLevel = uniqueArray(levelList);
 
             // console.log("tempLevel:", tempLevel);
@@ -250,10 +246,6 @@ d3.queue()
             maxDegree = Math.max.apply(null, degree.map(item => item.weight));
             // console.log("minDegree:", minDegree);
 
-            // normalize degree into 0-1
-            function normalize(val, max, min) {
-                return (val - min) / (max - min);
-            }
             degree.forEach(function (d) {
                 d.norWeight = normalize(d.weight, maxDegree, minDegree);
             });
