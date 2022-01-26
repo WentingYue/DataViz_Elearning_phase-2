@@ -857,9 +857,6 @@ d3.queue()
             regionList.push(d.region);
         })
 
-        var regionCal = aggregate(regionList);
-        // console.log("regionCal:", regionCal);
-
         var uniqueRegion = regionList.filter((v, i, a) => a.indexOf(v) === i);
 
         // console.log("uniqueRegion:", uniqueRegion);
