@@ -857,17 +857,6 @@ d3.queue()
             regionList.push(d.region);
         })
 
-        function aggregate(array) {
-            var obj = {};
-            array.forEach(function (val) {
-                if (!obj[val])
-                    obj[val] = 1;
-                else
-                    obj[val]++;
-            });
-            return obj;
-        }
-
         var regionCal = aggregate(regionList);
         // console.log("regionCal:", regionCal);
 
