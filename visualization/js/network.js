@@ -1298,10 +1298,6 @@ d3.queue()
 
         }
 
-        function radialPoint(x, y) {
-            return [(y = +y) * Math.cos(x -= Math.PI / 2), y * Math.sin(x)];
-        }
-
         // simulation
         $('#simulation:checkbox').change(function () {
             if (this.checked) {
