@@ -43,13 +43,6 @@ var projection = d3.geoMercator()
 var pathGenerator = d3.geoPath()
     .projection(projection);
 
-// Math
-var k = 2;
-
-function sigmoid(z) {
-    return (1 + Math.exp(-z / k));
-}
-
 //tree graph
 var treegraph = d3.select('#tree').append('svg')
 positiontree = treegraph.append('g');
