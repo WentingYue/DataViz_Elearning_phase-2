@@ -809,15 +809,6 @@ d3.queue()
             }
         })
 
-        function drawLink(d) {
-            context.moveTo(d.source.x, d.source.y);
-            context.lineTo(d.target.x, d.target.y);
-        }
-
-        function drawNode(d) {
-            context.moveTo(d.x + 3, d.y);
-        }
-
         // cartogram graph
         // var geojson = topojson.feature(data, data.objects.provinces).features;
         var geojson = topojson.feature(geodata, geodata.objects.regions).features;

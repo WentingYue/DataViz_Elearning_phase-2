@@ -31,3 +31,11 @@ function uniqueArray(a) {
     return [...new Set(a)];
 }
 
+function drawLink(d) {
+    context.moveTo(d.source.x, d.source.y);
+    context.lineTo(d.target.x, d.target.y);
+}
+
+function drawNode(d) {
+    context.moveTo(d.x + 3, d.y);
+}
