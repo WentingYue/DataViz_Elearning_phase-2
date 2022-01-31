@@ -43,13 +43,6 @@ var projection = d3.geoMercator()
 var pathGenerator = d3.geoPath()
     .projection(projection);
 
-// Math
-var k = 2;
-
-function sigmoid(z) {
-    return (1 + Math.exp(-z / k));
-}
-
 //tree graph
 var treegraph = d3.select('#tree').append('svg')
 positiontree = treegraph.append('g');
@@ -108,16 +101,18 @@ d3.queue()
     .defer(d3.json, "./cartogram/data/regions.json")
     .defer(d3.csv, "./data/tree.csv")
     .await(function (error, graphdata, geodata, treedata) {
+
         if (error) throw error;
 
         spinner.stop()
 
         // graph
         var g, store;
-        var degree, selfScore, validScore;
+        var degree, selfScore;
         var minDegree, maxDegree;
         var degreeList, scoreList, levelList, degreeData;
         var tempLevel;
+        var node, link, newNode, newLink, exitNode, exitLink;
 
         var threshold_a = 700;
         var threshold_b = 100;
@@ -126,37 +121,10 @@ d3.queue()
         var radius_b = 0.013;
         var radius_c = 0.03;
 
-        // real-time calculation
-        function aggregate(array) {
-            var obj = {};
-            array.forEach(function (val) {
-                if (!obj[val])
-                    obj[val] = 1;
-                else
-                    obj[val]++;
-            });
-            return obj;
-        }
-
-        function aggregateScore(array, score) {
-            var obj = {};
-            array.forEach(function (val) {
-                if (!obj[val.key])
-                    obj[val.key] = val[score];
-                else
-                    obj[val.key] = val[score] + obj[val.key];
-            });
-            return obj;
-        }
-
         g = graphdata;
         store = $.extend(true, {}, graphdata);
 
         initGraph();
-
-        // console.log(nodes.data());
-
-        var node, link, newNode, newLink, exitNode, exitLink;
 
         function initGraph() {
 
@@ -184,8 +152,6 @@ d3.queue()
 
             link.exit().remove();
 
-            // console.log("exitNode:", exitNode);
-
             // update links and nodes
             newLink = link.enter().append("custom").attr("class", "line");
             newNode = node.enter().append("custom").attr("class", "circle");
@@ -195,9 +161,6 @@ d3.queue()
                 .attr('r', function (d) {
                     return d.degree * 0.1;
                 });
-
-            // console.log("newNode:", newNode);
-            // console.log(g.nodes);
 
             // update + enter
             link = link.merge(newLink);
@@ -239,10 +202,6 @@ d3.queue()
                 })
             })
 
-            // find unique position level
-            function uniqueArray(a) {
-                return [...new Set(a)];
-            }
             tempLevel = uniqueArray(levelList);
 
             // console.log("tempLevel:", tempLevel);
@@ -273,10 +232,6 @@ d3.queue()
             maxDegree = Math.max.apply(null, degree.map(item => item.weight));
             // console.log("minDegree:", minDegree);
 
-            // normalize degree into 0-1
-            function normalize(val, max, min) {
-                return (val - min) / (max - min);
-            }
             degree.forEach(function (d) {
                 d.norWeight = normalize(d.weight, maxDegree, minDegree);
             });
@@ -840,15 +795,6 @@ d3.queue()
             }
         })
 
-        function drawLink(d) {
-            context.moveTo(d.source.x, d.source.y);
-            context.lineTo(d.target.x, d.target.y);
-        }
-
-        function drawNode(d) {
-            context.moveTo(d.x + 3, d.y);
-        }
-
         // cartogram graph
         // var geojson = topojson.feature(data, data.objects.provinces).features;
         var geojson = topojson.feature(geodata, geodata.objects.regions).features;
@@ -896,20 +842,6 @@ d3.queue()
             // console.log(edge.target);
             regionList.push(d.region);
         })
-
-        function aggregate(array) {
-            var obj = {};
-            array.forEach(function (val) {
-                if (!obj[val])
-                    obj[val] = 1;
-                else
-                    obj[val]++;
-            });
-            return obj;
-        }
-
-        var regionCal = aggregate(regionList);
-        // console.log("regionCal:", regionCal);
 
         var uniqueRegion = regionList.filter((v, i, a) => a.indexOf(v) === i);
 
@@ -1350,10 +1282,6 @@ d3.queue()
                 }
             })
 
-        }
-
-        function radialPoint(x, y) {
-            return [(y = +y) * Math.cos(x -= Math.PI / 2), y * Math.sin(x)];
         }
 
         // simulation
