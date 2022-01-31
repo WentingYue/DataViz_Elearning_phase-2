@@ -101,16 +101,18 @@ d3.queue()
     .defer(d3.json, "./cartogram/data/regions.json")
     .defer(d3.csv, "./data/tree.csv")
     .await(function (error, graphdata, geodata, treedata) {
+
         if (error) throw error;
 
         spinner.stop()
 
         // graph
         var g, store;
-        var degree, selfScore, validScore;
+        var degree, selfScore;
         var minDegree, maxDegree;
         var degreeList, scoreList, levelList, degreeData;
         var tempLevel;
+        var node, link, newNode, newLink, exitNode, exitLink;
 
         var threshold_a = 700;
         var threshold_b = 100;
@@ -123,10 +125,6 @@ d3.queue()
         store = $.extend(true, {}, graphdata);
 
         initGraph();
-
-        // console.log(nodes.data());
-
-        var node, link, newNode, newLink, exitNode, exitLink;
 
         function initGraph() {
 
@@ -154,8 +152,6 @@ d3.queue()
 
             link.exit().remove();
 
-            // console.log("exitNode:", exitNode);
-
             // update links and nodes
             newLink = link.enter().append("custom").attr("class", "line");
             newNode = node.enter().append("custom").attr("class", "circle");
@@ -165,9 +161,6 @@ d3.queue()
                 .attr('r', function (d) {
                     return d.degree * 0.1;
                 });
-
-            // console.log("newNode:", newNode);
-            // console.log(g.nodes);
 
             // update + enter
             link = link.merge(newLink);
