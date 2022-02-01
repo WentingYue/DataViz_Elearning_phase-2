@@ -39,12 +39,27 @@ There are two datasets
 
 #### Knowledge Assessment
 
-* This is a crosswalk between knowledge area and knowledge domain
-     - This data is unique on ID_KNOWLEDGE_DOMAIN
-     - Knowledge domain is nested within knowledge area (ID_KNOWLEDGE_AREA)
+* These data represent employees self-assessment of their knowledge areas
+* Almost every employee is represented, 106 which are in the employee data are not
+* The majority of self-assessments are missing validation data (62%)
+* Of the data which have validation, 87% match their validation
+* Of the 13% of responses which did not match their validation, 73% of these responses are within one unit of their manager's assessment
+    - Only 3% of the data which had validation where more than one unit away from their manager's assessment
 
 #### Knowledge Structure
 
+* This is a crosswalk between knowledge area and knowledge domain
+     - This data is unique on ID_KNOWLEDGE_DOMAIN
+     - Knowledge domain is nested within knowledge area (ID_KNOWLEDGE_AREA)
+     - There are 130 knowledge domains and 
+     - There are two knowledge domains (C01D03 and 	
+C32D06) without knowledge areas.
+
 #### Personas
 
+* This is a lookup table between persona and persona description
+* There are 37 personas
+* Personal descriptions are in English
+
 ### Hierarchy data
+
