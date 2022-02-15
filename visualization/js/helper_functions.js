@@ -47,3 +47,14 @@ function drawNode(d) {
 function radialPoint(x, y) {
     return [(y = +y) * Math.cos(x -= Math.PI / 2), y * Math.sin(x)];
 }
+
+// Title SelectRadius
+function selectRadius(maxDegree, threshold_a, threshold_b, radius_a, radius_b, radius_c) {
+    if (maxDegree > threshold_a) {
+        return radius_a;
+    } else if (threshold_a > maxDegree > threshold_b) {
+        return radius_b;
+    } else {
+        return radius_c;
+    }
+}

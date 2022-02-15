@@ -292,29 +292,20 @@ d3.queue()
             context.scale(transform.k, transform.k)
 
             for (const circle of g.nodes) {
+
                 context.beginPath();
                 drawNode(circle);
-                // console.log(node);
+
                 if (circle.domain) {
 
                     var newDegree = degree.find(o => o.id === circle.id);
-                    var maxDegree = Math.max.apply(null, degree.map(item => item.weight))
-
-                    // console.log("maxDegree:", maxDegree);
+                    var maxDegree = Math.max.apply(null, degree.map(item => item.weight));
+                    var radius = selectRadius(maxDegree, threshold_a, threshold_b, radius_a, radius_b, radius_c);
 
                     context.fillStyle = "rgba(200, 200, 200, 1)";
-                    if (maxDegree > threshold_a) {
-                        context.arc(circle.x, circle.y, newDegree.weight * radius_a, 0, 2 * Math.PI);
-                    } else if (threshold_a > maxDegree > threshold_b) {
-                        context.arc(circle.x, circle.y, newDegree.weight * radius_b, 0, 2 * Math.PI);
-                    } else {
-                        context.arc(circle.x, circle.y, newDegree.weight * radius_c, 0, 2 * Math.PI);
-                    }
+                    context.arc(circle.x, circle.y, newDegree.weight * radius, 0, 2 * Math.PI);
                     context.fill();
 
-                    // context.fillStyle = "rgba(255, 255, 255, 1)";
-                    // context.font = "18px roboto";
-                    // context.fillText(node.id, node.x + 20, node.y - 10);
                 } else {
                     context.arc(circle.x, circle.y, 1, 0, 2 * Math.PI);
                     context.fillStyle = "rgba(255, 255, 255, 0.2)";
