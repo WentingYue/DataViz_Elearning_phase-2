@@ -461,12 +461,11 @@ d3.queue()
 
                     if (!circle.domain) {
 
-                        context.fillStyle = ageScale(circle.age_groups );
+                        context.fillStyle = ageScale(circle.age_groups);
                         context.arc(circle.x, circle.y, 1, 0, 2 * Math.PI);
                         context.fill();
                     } else {
 
-                        context.fillStyle = "rgba(255, 255, 255, 0.5)";
                         if (maxDegree > threshold_a) {
                             context.arc(circle.x, circle.y, newDegree.weight * radius_a, 0, 2 * Math.PI);
                         } else if (threshold_a > maxDegree > threshold_b) {
