@@ -53,32 +53,21 @@ height_tree = 350;
 treegraph.attr('width', width_tree).attr('height', height_tree);
 positiontree.attr("transform", "translate(" + (width_tree / 2) + "," + (height_tree / 2 + 20) + ")");
 
-// age color setting
-var ageColor = [{
-        "age": "18-29",
-        "color": 'rgba(155, 93, 229, 1)'
-    },
-    {
-        "age": "30-39",
-        "color": 'rgba(241, 91, 181, 1)'
-    },
-    {
-        "age": "40-49",
-        "color": 'rgba(254, 228, 64, 1)'
-    },
-    {
-        "age": "50-59",
-        "color": 'rgba(0, 187, 249, 1)'
-    },
-    {
-        "age": "60-69",
-        "color": 'rgba(0, 245, 212, 1)'
-    },
-    {
-        "age": "70+",
-        "color": 'rgba(192, 192, 192, 1)'
-    }
-];
+let gender = ["male", "sex"];
+let age = ["18-29", "30-39", "40-49", "50-59", "60-69", "70+"];
+
+let genderScale = d3.scaleOrdinal()
+    .domain(gender)
+    .range(["rgb(196, 71, 255)", "rgb(255, 253, 41)"]);
+
+let sexScale = d3.scaleOrdinal()
+    .domain(["M", "F"])
+    .range(["rgb(196, 71, 255, .3)", "rgb(255, 253, 41, .3)"]);
+
+let ageScale = d3.scaleOrdinal()
+    .domain(age)
+    .range(["rgba(155, 93, 229, 1)", "rgba(241, 91, 181, 1)", "rgba(254, 228, 64, 1)", 
+            "rgba(0, 187, 249, 1)", "rgba(0, 245, 212, 1)", "rgba(192, 192, 192, 1)"]);
 
 // loader settings
 var opts = {
@@ -342,7 +331,7 @@ d3.queue()
             }
 
             //add draw conditions for tooltips
-            if (closeNode && filterValue === 'default' && !score && !positionClick) {
+            if (closeNode && demoValue === 'default' && !score && !positionClick) {
                 context.beginPath();
                 // drawNode(closeNode);
 
@@ -428,7 +417,7 @@ d3.queue()
             }
 
             //add draw conditions based on group filter
-            if (filterValue === "gender") {
+            if (demoValue === "gender") {
                 for (const circle of g.nodes) {
                     context.beginPath();
                     drawNode(circle);
@@ -437,15 +426,11 @@ d3.queue()
                     var maxDegree = Math.max.apply(null, degree.map(item => item.weight));
 
                     if (!circle.domain) {
-                        if (circle.sex === "F") {
-                            context.fillStyle = "rgba(255, 253, 41, 0.3)";
-                            context.arc(circle.x, circle.y, 1, 0, 2 * Math.PI);
-                            context.fill();
-                        } else {
-                            context.fillStyle = "rgba(196, 71, 255, 0.3)";
-                            context.arc(circle.x, circle.y, 1, 0, 2 * Math.PI);
-                            context.fill();
-                        }
+
+                        context.fillStyle = sexScale(circle.sex);
+                        context.arc(circle.x, circle.y, 1, 0, 2 * Math.PI);
+                        context.fill();
+
                     } else {
 
                         context.fillStyle = "rgba(255, 255, 255, 0.5)";
@@ -466,7 +451,7 @@ d3.queue()
                 }
             }
 
-            if (filterValue === "age") {
+            if (demoValue === "age") {
                 for (const circle of g.nodes) {
                     context.beginPath();
                     drawNode(circle);
@@ -475,8 +460,8 @@ d3.queue()
                     var maxDegree = Math.max.apply(null, degree.map(item => item.weight));
 
                     if (!circle.domain) {
-                        var newColor = ageColor.find(o => o.age === circle.age_groups);
-                        context.fillStyle = newColor.color;
+
+                        context.fillStyle = ageScale(circle.age_groups );
                         context.arc(circle.x, circle.y, 1, 0, 2 * Math.PI);
                         context.fill();
                     } else {
@@ -565,7 +550,7 @@ d3.queue()
                 }
             }
 
-            if (closeNode && positionClick && filterValue === 'default') {
+            if (closeNode && positionClick && demoValue === 'default') {
                 context.beginPath();
                 // drawNode(closeNode);
 
@@ -696,55 +681,10 @@ d3.queue()
 
         context.restore();
 
-        // filter color by different groups
-        var filterValue = $('#group').val();
-        var legends = d3.select('#legend');
-
+        var demoValue = $('#group').val();
         $('#group').change(function () {
-            filterValue = $(this).val();
-            // set legends
-            if (filterValue == "gender") {
-
-                legends.selectAll("rect").remove();
-                legends.selectAll("text").remove();
-
-                legends.append("rect").attr("x", 40).attr("y", 20)
-                    .attr("width", 8).attr("height", 8)
-                    .style("fill", "rgb(255, 253, 41)");
-
-                legends.append("text").attr("x", 70).attr("y", 25)
-                    .classed("province-label", true)
-                    .text("female")
-                    .attr("alignment-baseline", "middle")
-
-                legends.append("rect").attr("x", 40).attr("y", 50)
-                    .attr("width", 8).attr("height", 8)
-                    .style("fill", "rgb(196, 71, 255)");
-
-                legends.append("text").attr("x", 70).attr("y", 55)
-                    .classed("province-label", true)
-                    .text("male")
-                    .attr("alignment-baseline", "middle")
-
-            } else if (filterValue == "age") {
-                legends.selectAll("rect").remove();
-                legends.selectAll("text").remove();
-
-                ageColor.forEach(function (value, j) {
-                    legends.append("rect").attr("x", 40).attr("y", 20 + j * 30)
-                        .attr("width", 8).attr("height", 8)
-                        .style("fill", `${value.color}`);
-
-                    legends.append("text").attr("x", 70).attr("y", 25 + j * 30)
-                        .classed("province-label", true)
-                        .text(`${value.age}`)
-                        .attr("alignment-baseline", "middle")
-                })
-            } else {
-                legends.selectAll("rect").remove();
-                legends.selectAll("text").remove();
-            }
-            // console.log(filterValue);
+            demoValue = $(this).val();
+            renderDemoLegends(demoValue);
         })
 
         // apply score
