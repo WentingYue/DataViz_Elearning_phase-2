@@ -280,16 +280,21 @@ d3.queue()
             context.translate(transform.x, transform.y)
             context.scale(transform.k, transform.k)
 
+            var demoValue = $('#group').val();
+            $('#group').change(function () {
+                demoValue = $(this).val();
+                renderDemoLegends(demoValue);
+            });
+
             for (const circle of g.nodes) {
+
                 context.beginPath();
                 drawNode(circle);
-                // console.log(node);
+
                 if (circle.domain) {
 
                     var newDegree = degree.find(o => o.id === circle.id);
                     var maxDegree = Math.max.apply(null, degree.map(item => item.weight))
-
-                    // console.log("maxDegree:", maxDegree);
 
                     context.fillStyle = "rgba(200, 200, 200, 1)";
                     if (maxDegree > threshold_a) {
@@ -301,9 +306,6 @@ d3.queue()
                     }
                     context.fill();
 
-                    // context.fillStyle = "rgba(255, 255, 255, 1)";
-                    // context.font = "18px roboto";
-                    // context.fillText(node.id, node.x + 20, node.y - 10);
                 } else {
                     context.arc(circle.x, circle.y, 1, 0, 2 * Math.PI);
                     context.fillStyle = "rgba(255, 255, 255, 0.2)";
@@ -682,12 +684,6 @@ d3.queue()
         }
 
         context.restore();
-
-        var demoValue = $('#group').val();
-        $('#group').change(function () {
-            demoValue = $(this).val();
-            renderDemoLegends(demoValue);
-        })
 
         // apply score
         var score;
