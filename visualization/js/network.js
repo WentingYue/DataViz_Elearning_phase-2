@@ -418,7 +418,9 @@ d3.queue()
 
             //add draw conditions based on group filter
             if (demoValue === "gender") {
+
                 for (const circle of g.nodes) {
+
                     context.beginPath();
                     drawNode(circle);
 
@@ -433,8 +435,6 @@ d3.queue()
 
                     } else {
 
-                        context.fillStyle = "rgba(255, 255, 255, 0.5)";
-
                         if (maxDegree > threshold_a) {
                             context.arc(circle.x, circle.y, newDegree.weight * radius_a, 0, 2 * Math.PI);
                         } else if (threshold_a > maxDegree > threshold_b) {
@@ -442,8 +442,8 @@ d3.queue()
                         } else {
                             context.arc(circle.x, circle.y, newDegree.weight * radius_c, 0, 2 * Math.PI);
                         }
-                        context.fill();
 
+                        context.fill();
                         context.fillStyle = "rgba(240, 240, 240, 0.8)";
                         context.font = getFont(newDegree);
                         context.fillText(circle.id, circle.x + 2, circle.y + 2);
@@ -452,7 +452,9 @@ d3.queue()
             }
 
             if (demoValue === "age") {
+
                 for (const circle of g.nodes) {
+
                     context.beginPath();
                     drawNode(circle);
 
@@ -464,6 +466,7 @@ d3.queue()
                         context.fillStyle = ageScale(circle.age_groups);
                         context.arc(circle.x, circle.y, 1, 0, 2 * Math.PI);
                         context.fill();
+
                     } else {
 
                         if (maxDegree > threshold_a) {
@@ -473,8 +476,8 @@ d3.queue()
                         } else {
                             context.arc(circle.x, circle.y, newDegree.weight * radius_c, 0, 2 * Math.PI);
                         }
-                        context.fill();
 
+                        context.fill();
                         context.fillStyle = "rgba(240, 240, 240, 0.8)";
                         context.font = getFont(newDegree);
                         context.fillText(circle.id, circle.x + 2, circle.y + 2);
