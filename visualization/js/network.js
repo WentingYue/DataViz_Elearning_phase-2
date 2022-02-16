@@ -304,13 +304,12 @@ d3.queue()
                     } else {
                         context.arc(circle.x, circle.y, newDegree.weight * radius_c, 0, 2 * Math.PI);
                     }
-                    context.fill();
 
                 } else {
                     context.arc(circle.x, circle.y, 1, 0, 2 * Math.PI);
                     context.fillStyle = "rgba(255, 255, 255, 0.2)";
-                    context.fill();
                 }
+                context.fill();
             }
 
             if ($('#simulation:checkbox').is(':checked')) {
