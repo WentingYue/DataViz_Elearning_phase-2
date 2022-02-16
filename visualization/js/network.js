@@ -53,32 +53,21 @@ height_tree = 350;
 treegraph.attr('width', width_tree).attr('height', height_tree);
 positiontree.attr("transform", "translate(" + (width_tree / 2) + "," + (height_tree / 2 + 20) + ")");
 
-// age color setting
-var ageColor = [{
-        "age": "18-29",
-        "color": 'rgba(155, 93, 229, 1)'
-    },
-    {
-        "age": "30-39",
-        "color": 'rgba(241, 91, 181, 1)'
-    },
-    {
-        "age": "40-49",
-        "color": 'rgba(254, 228, 64, 1)'
-    },
-    {
-        "age": "50-59",
-        "color": 'rgba(0, 187, 249, 1)'
-    },
-    {
-        "age": "60-69",
-        "color": 'rgba(0, 245, 212, 1)'
-    },
-    {
-        "age": "70+",
-        "color": 'rgba(192, 192, 192, 1)'
-    }
-];
+let gender = ["male", "sex"];
+let age = ["18-29", "30-39", "40-49", "50-59", "60-69", "70+"];
+
+let genderScale = d3.scaleOrdinal()
+    .domain(gender)
+    .range(["rgb(196, 71, 255)", "rgb(255, 253, 41)"]);
+
+let sexScale = d3.scaleOrdinal()
+    .domain(["M", "F"])
+    .range(["rgb(196, 71, 255, .3)", "rgb(255, 253, 41, .3)"]);
+
+let ageScale = d3.scaleOrdinal()
+    .domain(age)
+    .range(["rgba(155, 93, 229, 1)", "rgba(241, 91, 181, 1)", "rgba(254, 228, 64, 1)", 
+            "rgba(0, 187, 249, 1)", "rgba(0, 245, 212, 1)", "rgba(192, 192, 192, 1)"]);
 
 // loader settings
 var opts = {
@@ -291,16 +280,21 @@ d3.queue()
             context.translate(transform.x, transform.y)
             context.scale(transform.k, transform.k)
 
+            var demoValue = $('#group').val();
+            $('#group').change(function () {
+                demoValue = $(this).val();
+                renderDemoLegends(demoValue);
+            });
+
             for (const circle of g.nodes) {
+
                 context.beginPath();
                 drawNode(circle);
-                // console.log(node);
+
                 if (circle.domain) {
 
                     var newDegree = degree.find(o => o.id === circle.id);
                     var maxDegree = Math.max.apply(null, degree.map(item => item.weight))
-
-                    // console.log("maxDegree:", maxDegree);
 
                     context.fillStyle = "rgba(200, 200, 200, 1)";
                     if (maxDegree > threshold_a) {
@@ -310,16 +304,19 @@ d3.queue()
                     } else {
                         context.arc(circle.x, circle.y, newDegree.weight * radius_c, 0, 2 * Math.PI);
                     }
-                    context.fill();
 
-                    // context.fillStyle = "rgba(255, 255, 255, 1)";
-                    // context.font = "18px roboto";
-                    // context.fillText(node.id, node.x + 20, node.y - 10);
                 } else {
+
+                    if (demoValue === "gender") {
+                        context.fillStyle = sexScale(circle.sex);
+                    } else if(demoValue === "age") {
+                        context.fillStyle = ageScale(circle.age_groups);
+                    } else {
+                        context.fillStyle = "rgba(255, 255, 255, 0.2)";   
+                    }
                     context.arc(circle.x, circle.y, 1, 0, 2 * Math.PI);
-                    context.fillStyle = "rgba(255, 255, 255, 0.2)";
-                    context.fill();
                 }
+                context.fill();
             }
 
             if ($('#simulation:checkbox').is(':checked')) {
@@ -342,7 +339,7 @@ d3.queue()
             }
 
             //add draw conditions for tooltips
-            if (closeNode && filterValue === 'default' && !score && !positionClick) {
+            if (closeNode && demoValue === 'default' && !score && !positionClick) {
                 context.beginPath();
                 // drawNode(closeNode);
 
@@ -427,77 +424,6 @@ d3.queue()
                 }
             }
 
-            //add draw conditions based on group filter
-            if (filterValue === "gender") {
-                for (const circle of g.nodes) {
-                    context.beginPath();
-                    drawNode(circle);
-
-                    var newDegree = degree.find(o => o.id === circle.id);
-                    var maxDegree = Math.max.apply(null, degree.map(item => item.weight));
-
-                    if (!circle.domain) {
-                        if (circle.sex === "F") {
-                            context.fillStyle = "rgba(255, 253, 41, 0.3)";
-                            context.arc(circle.x, circle.y, 1, 0, 2 * Math.PI);
-                            context.fill();
-                        } else {
-                            context.fillStyle = "rgba(196, 71, 255, 0.3)";
-                            context.arc(circle.x, circle.y, 1, 0, 2 * Math.PI);
-                            context.fill();
-                        }
-                    } else {
-
-                        context.fillStyle = "rgba(255, 255, 255, 0.5)";
-
-                        if (maxDegree > threshold_a) {
-                            context.arc(circle.x, circle.y, newDegree.weight * radius_a, 0, 2 * Math.PI);
-                        } else if (threshold_a > maxDegree > threshold_b) {
-                            context.arc(circle.x, circle.y, newDegree.weight * radius_b, 0, 2 * Math.PI);
-                        } else {
-                            context.arc(circle.x, circle.y, newDegree.weight * radius_c, 0, 2 * Math.PI);
-                        }
-                        context.fill();
-
-                        context.fillStyle = "rgba(240, 240, 240, 0.8)";
-                        context.font = getFont(newDegree);
-                        context.fillText(circle.id, circle.x + 2, circle.y + 2);
-                    }
-                }
-            }
-
-            if (filterValue === "age") {
-                for (const circle of g.nodes) {
-                    context.beginPath();
-                    drawNode(circle);
-
-                    var newDegree = degree.find(o => o.id === circle.id);
-                    var maxDegree = Math.max.apply(null, degree.map(item => item.weight));
-
-                    if (!circle.domain) {
-                        var newColor = ageColor.find(o => o.age === circle.age_groups);
-                        context.fillStyle = newColor.color;
-                        context.arc(circle.x, circle.y, 1, 0, 2 * Math.PI);
-                        context.fill();
-                    } else {
-
-                        context.fillStyle = "rgba(255, 255, 255, 0.5)";
-                        if (maxDegree > threshold_a) {
-                            context.arc(circle.x, circle.y, newDegree.weight * radius_a, 0, 2 * Math.PI);
-                        } else if (threshold_a > maxDegree > threshold_b) {
-                            context.arc(circle.x, circle.y, newDegree.weight * radius_b, 0, 2 * Math.PI);
-                        } else {
-                            context.arc(circle.x, circle.y, newDegree.weight * radius_c, 0, 2 * Math.PI);
-                        }
-                        context.fill();
-
-                        context.fillStyle = "rgba(240, 240, 240, 0.8)";
-                        context.font = getFont(newDegree);
-                        context.fillText(circle.id, circle.x + 2, circle.y + 2);
-                    }
-                }
-            }
-
             if (score) {
                 for (const circle of g.nodes) {
                     if (circle.domain) {
@@ -565,7 +491,7 @@ d3.queue()
                 }
             }
 
-            if (closeNode && positionClick && filterValue === 'default') {
+            if (closeNode && positionClick && demoValue === 'default') {
                 context.beginPath();
                 // drawNode(closeNode);
 
@@ -695,57 +621,6 @@ d3.queue()
         }
 
         context.restore();
-
-        // filter color by different groups
-        var filterValue = $('#group').val();
-        var legends = d3.select('#legend');
-
-        $('#group').change(function () {
-            filterValue = $(this).val();
-            // set legends
-            if (filterValue == "gender") {
-
-                legends.selectAll("rect").remove();
-                legends.selectAll("text").remove();
-
-                legends.append("rect").attr("x", 40).attr("y", 20)
-                    .attr("width", 8).attr("height", 8)
-                    .style("fill", "rgb(255, 253, 41)");
-
-                legends.append("text").attr("x", 70).attr("y", 25)
-                    .classed("province-label", true)
-                    .text("female")
-                    .attr("alignment-baseline", "middle")
-
-                legends.append("rect").attr("x", 40).attr("y", 50)
-                    .attr("width", 8).attr("height", 8)
-                    .style("fill", "rgb(196, 71, 255)");
-
-                legends.append("text").attr("x", 70).attr("y", 55)
-                    .classed("province-label", true)
-                    .text("male")
-                    .attr("alignment-baseline", "middle")
-
-            } else if (filterValue == "age") {
-                legends.selectAll("rect").remove();
-                legends.selectAll("text").remove();
-
-                ageColor.forEach(function (value, j) {
-                    legends.append("rect").attr("x", 40).attr("y", 20 + j * 30)
-                        .attr("width", 8).attr("height", 8)
-                        .style("fill", `${value.color}`);
-
-                    legends.append("text").attr("x", 70).attr("y", 25 + j * 30)
-                        .classed("province-label", true)
-                        .text(`${value.age}`)
-                        .attr("alignment-baseline", "middle")
-                })
-            } else {
-                legends.selectAll("rect").remove();
-                legends.selectAll("text").remove();
-            }
-            // console.log(filterValue);
-        })
 
         // apply score
         var score;
