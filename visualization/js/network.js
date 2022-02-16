@@ -308,18 +308,13 @@ d3.queue()
                 } else {
 
                     if (demoValue === "gender") {
-
                         context.fillStyle = sexScale(circle.sex);
-                        context.arc(circle.x, circle.y, 1, 0, 2 * Math.PI);
-                        context.fill();
                     } else if(demoValue === "age") {
                         context.fillStyle = ageScale(circle.age_groups);
-                        context.arc(circle.x, circle.y, 1, 0, 2 * Math.PI);
-                        context.fill();
                     } else {
-                        context.arc(circle.x, circle.y, 1, 0, 2 * Math.PI);
                         context.fillStyle = "rgba(255, 255, 255, 0.2)";   
                     }
+                    context.arc(circle.x, circle.y, 1, 0, 2 * Math.PI);
                 }
                 context.fill();
             }
